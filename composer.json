@@ -1,0 +1,13 @@
+{
+    "name": "maartenstaa/moodle-eloquent",
+    "type": "library",
+    "require": {
+        "illuminate/database": "5.4"
+    },
+    "authors": [
+        {
+            "name": "Maarten Staa",
+            "email": "maarten.staa@brightalley.nl"
+        }
+    ]
+}
