@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8025fd986cce839f1505a4771d025be",
+    "content-hash": "39a5b1b0437e5a2d744c611d3538ad9a",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -160,16 +160,16 @@
         },
         {
             "name": "illuminate/database",
-            "version": "v5.4.0",
+            "version": "v5.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "19abe553a49e2355bfc7a414ddbbc74439e07c58"
+                "reference": "7323bfc4e3e0aa46f427c705091dc373160d3983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/19abe553a49e2355bfc7a414ddbbc74439e07c58",
-                "reference": "19abe553a49e2355bfc7a414ddbbc74439e07c58",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/7323bfc4e3e0aa46f427c705091dc373160d3983",
+                "reference": "7323bfc4e3e0aa46f427c705091dc373160d3983",
                 "shasum": ""
             },
             "require": {
@@ -216,7 +216,51 @@
                 "orm",
                 "sql"
             ],
-            "time": "2017-01-23T23:03:28+00:00"
+            "time": "2017-04-02T22:04:36+00:00"
+        },
+        {
+            "name": "illuminate/pagination",
+            "version": "v5.4.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/pagination.git",
+                "reference": "cabab5b5a9c124efb9013d5ca28ab8d479f8dfac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/pagination/zipball/cabab5b5a9c124efb9013d5ca28ab8d479f8dfac",
+                "reference": "cabab5b5a9c124efb9013d5ca28ab8d479f8dfac",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.4.*",
+                "illuminate/support": "5.4.*",
+                "php": ">=5.6.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Pagination\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Pagination package.",
+            "homepage": "https://laravel.com",
+            "time": "2017-03-28T13:05:02+00:00"
         },
         {
             "name": "illuminate/support",

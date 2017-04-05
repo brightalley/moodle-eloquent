@@ -101,7 +101,18 @@ abstract class connection extends base_connection {
             // For select statements, we'll simply execute the query and return an array
             // of the database result set. Each element in the array will be a single
             // row from the database table, and will either be an array or objects.
-            return $this->db->get_records_sql($query, $bindings);
+            $recordset = $this->db->get_recordset_sql($query, $bindings);
+
+            // We use a record set to work around Moodle's insistence that the value
+            // of the first column should always be unique.
+            $records = [];
+            foreach ($recordset as $record) {
+                $records[] = $record;
+            }
+
+            $recordset->close();
+
+            return $records;
         });
     }
 
@@ -155,41 +166,41 @@ abstract class connection extends base_connection {
             // Identifiers is now an array containing the table name (including
             // prefix), and the column names that are being inserted.
             $identifiers = $matches[1];
-            $columns = array_slice($identifiers, 1);
-
-            // Combine the columns with the bindings to produce an associative
-            // array of column -> value.
-            $row = array_combine($columns, $bindings);
 
             // Strip off the table prefix, since Moodle re-adds it.
             $table = substr($identifiers[0], strlen($this->tablePrefix));
 
-            return $this->db->insert_record_raw($table, $row);
+            // Get the columns. If there is no id column, we should use a regular
+            // statement, since otherwise Moodle will try to extract the inserted
+            // id, and throw an error.
+            $columns = $this->db->get_columns($table);
+            if (!array_key_exists('id', $columns)) {
+                return $this->db->execute($query, $bindings);
+            }
+
+            $columns = array_slice($identifiers, 1);
+            if (count($columns) == count($bindings)) {
+                // Combine the columns with the bindings to produce an associative
+                // array of column -> value.
+                $row = array_combine($columns, $bindings);
+
+                return $this->db->insert_record_raw($table, $row);
+            }
+
+            // Sanity check.
+            if (count($bindings) % count($columns) != 0) {
+                var_dump('sanity check for bulk insert failed!!!');
+            }
+
+            // There are multiple rows.
+            $rows = [];
+            for ($i = 0; $i < count($bindings); $i += count($columns)) {
+                $rows[] = array_combine($columns, array_slice($bindings, $i, count($columns)));
+            }
+
+            $this->db->insert_records($table, $rows);
+            return true;
         });
-    }
-
-    /**
-     * Run an update statement against the database.
-     *
-     * @param  string  $query
-     * @param  array   $bindings
-     * @return int
-     */
-    public function update($query, $bindings = [])
-    {
-        return $this->affectingStatement($query, $bindings);
-    }
-
-    /**
-     * Run a delete statement against the database.
-     *
-     * @param  string  $query
-     * @param  array   $bindings
-     * @return int
-     */
-    public function delete($query, $bindings = [])
-    {
-        return $this->affectingStatement($query, $bindings);
     }
 
     /**
