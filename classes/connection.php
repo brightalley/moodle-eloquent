@@ -12,6 +12,7 @@ use Illuminate\Database\Grammar;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
+use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use local_eloquent\query\processors\processor;
 use moodle_database;
@@ -524,16 +525,8 @@ abstract class connection implements ConnectionInterface {
     {
         $start = microtime(true);
 
-        // Here we will run this query. If an exception occurs we'll determine if it was
-        // caused by a connection that has been lost. If that is the cause, we'll try
-        // to re-establish connection and re-run the query with a fresh connection.
-        try {
-            $result = $this->runQueryCallback($query, $bindings, $callback);
-        } catch (QueryException $e) {
-            $result = $this->handleQueryException(
-                $e, $query, $bindings, $callback
-            );
-        }
+        // Here we will run this query.
+        $result = $this->runQueryCallback($query, $bindings, $callback);
 
         // Once we have run the query we will calculate the time that it took to run and
         // then log the query, bindings, and execution time so we will report them on
@@ -600,26 +593,6 @@ abstract class connection implements ConnectionInterface {
     protected function getElapsedTime($start)
     {
         return round((microtime(true) - $start) * 1000, 2);
-    }
-
-    /**
-     * Handle a query exception.
-     *
-     * @param  \Exception  $e
-     * @param  string  $query
-     * @param  array  $bindings
-     * @param  \Closure  $callback
-     * @return mixed
-     */
-    protected function handleQueryException($e, $query, $bindings, Closure $callback)
-    {
-        if ($this->transactions >= 1) {
-            throw $e;
-        }
-
-        return $this->tryAgainIfCausedByLostConnection(
-            $e, $query, $bindings, $callback
-        );
     }
 
     /**
