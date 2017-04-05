@@ -18,11 +18,6 @@ class DatabaseEloquentPolymorphicRelationsIntegrationTest extends TestCase
     {
         $db = new DB;
 
-        $db->addConnection([
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-        ]);
-
         $db->bootEloquent();
         $db->setAsGlobal();
 
@@ -31,25 +26,25 @@ class DatabaseEloquentPolymorphicRelationsIntegrationTest extends TestCase
 
     protected function createSchema()
     {
-        $this->schema('default')->create('posts', function ($table) {
+        $this->schema()->create('posts', function ($table) {
             $table->increments('id');
             $table->integer('timecreated');
             $table->integer('timeupdated');
         });
 
-        $this->schema('default')->create('images', function ($table) {
+        $this->schema()->create('images', function ($table) {
             $table->increments('id');
             $table->integer('timecreated');
             $table->integer('timeupdated');
         });
 
-        $this->schema('default')->create('tags', function ($table) {
+        $this->schema()->create('tags', function ($table) {
             $table->increments('id');
             $table->integer('timecreated');
             $table->integer('timeupdated');
         });
 
-        $this->schema('default')->create('taggables', function ($table) {
+        $this->schema()->create('taggables', function ($table) {
             $table->integer('eloquent_many_to_many_polymorphic_test_tag_id');
             $table->integer('taggable_id');
             $table->string('taggable_type');
@@ -116,9 +111,9 @@ class DatabaseEloquentPolymorphicRelationsIntegrationTest extends TestCase
      *
      * @return \Illuminate\Database\Connection
      */
-    protected function connection($connection = 'default')
+    protected function connection()
     {
-        return Eloquent::getConnectionResolver()->connection($connection);
+        return Eloquent::resolveConnection();
     }
 
     /**
@@ -126,7 +121,7 @@ class DatabaseEloquentPolymorphicRelationsIntegrationTest extends TestCase
      *
      * @return \Illuminate\Database\Schema\Builder
      */
-    protected function schema($connection = 'default')
+    protected function schema()
     {
         return $this->connection()->getSchemaBuilder();
     }
