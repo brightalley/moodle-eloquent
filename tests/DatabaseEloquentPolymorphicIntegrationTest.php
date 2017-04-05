@@ -14,11 +14,6 @@ class DatabaseEloquentPolymorphicIntegrationTest extends TestCase
     {
         $db = new DB;
 
-        $db->addConnection([
-            'driver'    => 'sqlite',
-            'database'  => ':memory:',
-        ]);
-
         $db->bootEloquent();
         $db->setAsGlobal();
 
@@ -74,6 +69,7 @@ class DatabaseEloquentPolymorphicIntegrationTest extends TestCase
      */
     public function tearDown()
     {
+        $this->schema()->drop('likes');
         $this->schema()->drop('users');
         $this->schema()->drop('posts');
         $this->schema()->drop('comments');
@@ -142,7 +138,7 @@ class DatabaseEloquentPolymorphicIntegrationTest extends TestCase
      */
     protected function connection()
     {
-        return Eloquent::getConnectionResolver()->connection();
+        return Eloquent::resolveConnection();
     }
 
     /**
