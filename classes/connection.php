@@ -387,9 +387,10 @@ abstract class connection extends base_connection {
     /**
      * Rollback the active database transaction.
      *
+     * @param  int|null  $toLevel
      * @return void
      */
-    public function rollBack()
+    public function rollBack($toLevel = null)
     {
         throw new Exception('transactions are not yet supported');
         $this->db->rollback_delegated_transaction();
