@@ -28,7 +28,7 @@ class model extends base_model {
      *
      * @var string
      */
-    const UPDATED_AT = 'timeupdated';
+    const UPDATED_AT = 'timemodified';
 
     /**
      * Get a fresh timestamp for the model.
