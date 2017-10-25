@@ -2,7 +2,7 @@
 
 namespace local_eloquent\eloquent;
 
-require_once(__DIR__.'/../../vendor/autoload.php');
+require_once(__DIR__.'/../../lib.php');
 
 use Illuminate\Database\Eloquent\Model as base_model;
 use local_eloquent\connection;
