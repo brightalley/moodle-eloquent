@@ -8,7 +8,7 @@ use Illuminate\Container\Container;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Events\EventServiceProvider;
 
-(function () {
+call_user_func(function () {
     $app = new Container();
 
     // Create service providers.
@@ -26,4 +26,4 @@ use Illuminate\Events\EventServiceProvider;
             return call_user_func([$provider, 'boot']);
         }
     }
-})();
+});
